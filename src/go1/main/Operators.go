@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"strings"
+	"time"
 )
 
 const PI = 3.1415926
@@ -182,8 +183,44 @@ func main() {
 		fmt.Println("default....")
 	}
 
-	// select
-
+	// select控制
+	// select是Go中的一个控制结构，类似于switch语句，用于处理异步IO操作。
+	// select会监听case语句中channel的读写操作，当case中channel读写操作为非阻塞状态（即能读写）时，将会触发相应的动作。
+	var c1, c2, c3 chan int
+	var r1, r2 int
+	select {
+	case r1 = <-c1:
+		fmt.Println("received ", r1, "from c1.")
+	case c2 <- r2:
+		fmt.Println("send ", r2, "to c2.")
+	case i3, ok := (<-c3):
+		if ok {
+			fmt.Println("received ", i3, "from c3.")
+		} else {
+			fmt.Println("c3 was closed.")
+		}
+	case <-time.After(time.Second * 2): // 超时退出
+		fmt.Println("request time out.")
+	}
+	// for循环
+	for i := 0; i < len(arrLazy); i++ {
+		fmt.Println(arrLazy[i])
+	}
+	var ss string = "你好，世界！"
+	for i := 0; i < len(ss); i++ {
+		fmt.Printf("%d:%c\t", i, ss[i])
+	}
+	fmt.Println()
+	for i, v := range ss {
+		fmt.Printf("%d:%c\t", i, v)
+	}
+	// Go语言中没有while，直接使用for来实现while
+	fmt.Println()
+	for {
+		fmt.Println("use the 'for' to replace 'while'.")
+		break
+	}
+	fmt.Println("---------------------------")
 }
 
 func arrHandle(arr []int) {
